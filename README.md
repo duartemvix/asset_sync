@@ -77,6 +77,13 @@ Or, to use Azure Blob storage, configure as this.
   config.action_controller.asset_host = "//#{ENV['AZURE_STORAGE_ACCOUNT_NAME']}.blob.core.windows.net/#{ENV['FOG_DIRECTORY']}"
 ```
 
+Or, to use Backblaze B2, configure as this.
+
+``` ruby
+  # The path for this host should equal to /file/<your_public_bucket>/
+  config.action_controller.asset_host = "//f000.backblazeb2.com/file/#{ENV['FOG_DIRECTORY']}"
+```
+
 
 On **HTTPS**: the exclusion of any protocol in the asset host declaration above will allow browsers to choose the transport mechanism on the fly. So if your application is available under both HTTP and HTTPS the assets will be served to match.
 
@@ -170,7 +177,7 @@ heroku config:add FOG_DIRECTORY=xxxx
 heroku config:add FOG_PROVIDER=Rackspace
 ```
 
-Google Storage Cloud configuration is supported as well. The preferred option is using the [GCS JSON API](https://github.com/fog/fog-google#storage) which requires that you create an appropriate service account, generate the signatures and make them accessible to asset sync at the prescribed location 
+Google Storage Cloud configuration is supported as well. The preferred option is using the [GCS JSON API](https://github.com/fog/fog-google#storage) which requires that you create an appropriate service account, generate the signatures and make them accessible to asset sync at the prescribed location
 
 ```bash
 heroku config:add FOG_PROVIDER=Google
@@ -199,6 +206,7 @@ Run the included Rake task to generate a starting point.
     rails g asset_sync:install --provider=Rackspace
     rails g asset_sync:install --provider=AWS
     rails g asset_sync:install --provider=AzureRM
+    rails g asset_sync:install --provider=Backblaze
 
 The generator will create a Rails initializer at `config/initializers/asset_sync.rb`.
 
@@ -245,7 +253,7 @@ AssetSync.configure do |config|
   #
   # Upload files concurrently
   # config.concurrent_uploads = false
-  # 
+  #
   # Number of threads when concurrent_uploads is enabled
   # config.concurrent_uploads_max_threads = 10
   #
@@ -274,6 +282,7 @@ Run the included Rake task to generate a starting point.
     rails g asset_sync:install --use-yml --provider=Rackspace
     rails g asset_sync:install --use-yml --provider=AWS
     rails g asset_sync:install --use-yml --provider=AzureRM
+    rails g asset_sync:install --use-yml --provider=Backblaze
 
 The generator will create a YAML file at `config/asset_sync.yml`.
 
@@ -383,7 +392,7 @@ To customize the overrides:
 AssetSync.configure do |config|
   # Clear the default overrides
   config.file_ext_to_mime_type_overrides.clear
-  
+
   # Add/Edit overrides
   # Will call `#to_s` for inputs
   config.file_ext_to_mime_type_overrides.add(:js, :"application/x-javascript")
@@ -392,7 +401,7 @@ end
 The blocks are run when local files are being scanned and uploaded
 
 #### Fog (Required)
-* **fog\_provider**: your storage provider *AWS* (S3) or *Rackspace* (Cloud Files) or *Google* (Google Storage) or *AzureRM* (Azure Blob)
+* **fog\_provider**: your storage provider *AWS* (S3) or *Rackspace* (Cloud Files) or *Google* (Google Storage) or *AzureRM* (Azure Blob) or *Backblaze* (Backblaze B2)
 * **fog\_directory**: your bucket name
 
 #### Fog (Optional)
@@ -551,7 +560,7 @@ AssetSync.configure do |config|
   config.prefix = 'assets'
   # Can be a `Pathname` or `String`
   # Will be converted into an `Pathname`
-  # If relative, will be converted into an absolute path 
+  # If relative, will be converted into an absolute path
   # via `::Rails.root` or `::Dir.pwd`
   config.public_path = Pathname('./public')
 end
@@ -622,7 +631,7 @@ Make sure you have a .env file with these details:-
     AWS_SECRET_ACCESS_KEY=<yoursecretkey>
     FOG_DIRECTORY=<yourbucket>
     FOG_REGION=<youbucketregion>
-    
+
     # for AzureRM provider
     AZURE_STORAGE_ACCOUNT_NAME=<youraccountname>
     AZURE_STORAGE_ACCESS_KEY=<youraccesskey>

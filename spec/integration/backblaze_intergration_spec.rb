@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-require "fog/azurerm"
+require "fog/backblaze"
 
 def bucket(name)
   options = {
-    :provider => 'AzureRM',
-    :azure_storage_account_name => ENV['AZURE_STORAGE_ACCOUNT_NAME'],
-    :azure_storage_access_key => ENV['AZURE_STORAGE_ACCESS_KEY']
+    :provider => 'Backblaze',
+    :azure_storage_account_name => ENV['B2_KEY_TOKEN'],
+    :azure_storage_access_key   => ENV['B2_KEY_TOKEN']
   }
   options.merge!({ :environment => ENV['FOG_REGION'] }) if ENV.has_key?('FOG_REGION')
 

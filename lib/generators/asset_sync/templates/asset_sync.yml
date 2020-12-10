@@ -32,6 +32,11 @@ defaults: &defaults
   fog_provider: 'AzureRM'
   azure_storage_account_name: "<%= azure_storage_account_name %>"
   azure_storage_access_key: "<%= azure_storage_access_key %>"
+  <%- elsif backblaze? -%>
+  fog_provider: 'Backblaze'
+  b2_key_id:      "<%= b2_key_id %>"
+  b2_key_token:   "<%= b2_key_token %>"
+  b2_bucket_id:   "<%= b2_bucket_id %>"
 
   # fog_directory specifies container name of Azure Blob storage
   <%- end -%>

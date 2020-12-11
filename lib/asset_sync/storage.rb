@@ -22,6 +22,8 @@ module AssetSync
 
     def bucket
       # fixes: https://github.com/rumblelabs/asset_sync/issues/18
+
+      # Backblaze B2 bucket objects do not need neither a path nor a prefix in order to be instantiated. However, as far as I've seen setting a prefix on this call could be redundant and the keyword argument could be removed
       @bucket ||= connection.directories.get(self.config.fog_directory, :prefix => self.config.assets_prefix)
     end
 
